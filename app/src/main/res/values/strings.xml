@@ -24,4 +24,8 @@
 
     <string name="pref_unit_imperial">imperial</string>
 
+    <string name="action_map">Location</string>
+
+    <string name="action_share">Share</string>
+
 </resources>
