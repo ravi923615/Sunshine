@@ -40,13 +40,9 @@ public class TestDb extends AndroidTestCase {
         deleteTheDatabase();
     }
 
-    /*
-        Students: Uncomment this test once you've written the code to create the Location
-        table.  Note that you will have to have chosen the same column names that I did in
-        my solution for this test to compile, so if you haven't yet done that, this is
-        a good time to change your column names to match mine.
 
-        Note that this only tests that the Location table has the correct columns, since we
+
+        /* Note that this only tests that the Location table has the correct columns, since we
         give you the code for the weather table.  This test does not look at the
      */
     public void testCreateDb() throws Throwable {
