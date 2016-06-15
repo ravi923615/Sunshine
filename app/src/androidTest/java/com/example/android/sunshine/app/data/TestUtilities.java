@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 /*
-    These are functions and some test data to make it easier to test your database and
+    Students: These are functions and some test data to make it easier to test your database and
     Content Provider.  Note that you'll want your WeatherContract class to exactly match the one
     in our solution to use these as-given.
  */
@@ -62,7 +62,11 @@ public class TestUtilities extends AndroidTestCase {
         return weatherValues;
     }
 
-   static ContentValues createNorthPoleLocationValues() {
+    /*
+        Students: You can uncomment this helper function once you have finished creating the
+        LocationEntry part of the WeatherContract.
+     */
+    static ContentValues createNorthPoleLocationValues() {
         // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
         testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
@@ -73,7 +77,11 @@ public class TestUtilities extends AndroidTestCase {
         return testValues;
     }
 
-   static long insertNorthPoleLocationValues(Context context) {
+    /*
+        Students: You can uncomment this function once you have finished creating the
+        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
+     */
+    static long insertNorthPoleLocationValues(Context context) {
         // insert our test records into the database
         WeatherDbHelper dbHelper = new WeatherDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -89,7 +97,7 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     /*
-        The functions we provide inside of TestProvider use this utility class to test
+        Students: The functions we provide inside of TestProvider use this utility class to test
         the ContentObserver callbacks using the PollingCheck class that we grabbed from the Android
         CTS tests.
 

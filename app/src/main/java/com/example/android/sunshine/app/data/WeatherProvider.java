@@ -39,7 +39,7 @@ public class WeatherProvider extends ContentProvider {
 
     static{
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
-
+        
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
         sWeatherByLocationSettingQueryBuilder.setTables(
@@ -146,6 +146,7 @@ public class WeatherProvider extends ContentProvider {
     /*
         Students: Here's where you'll code the getType function that uses the UriMatcher.  You can
         test this by uncommenting testGetType in TestProvider.
+
      */
     @Override
     public String getType(Uri uri) {
@@ -256,29 +257,28 @@ public class WeatherProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Student: Start by getting a writable database
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
-        int DBretval;
-        if(null==selection) selection="1";
-        switch (match){
-            case WEATHER: {
-                DBretval = db.delete(WeatherContract.WeatherEntry.TABLE_NAME,selection,selectionArgs);
+        int rowsDeleted;
+        // this makes delete all rows return the number of rows deleted
+        if ( null == selection ) selection = "1";
+        switch (match) {
+            case WEATHER:
+                rowsDeleted = db.delete(
+                        WeatherContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            }
-            case LOCATION: {
-                DBretval = db.delete(WeatherContract.LocationEntry.TABLE_NAME,selection,selectionArgs);
+            case LOCATION:
+                rowsDeleted = db.delete(
+                        WeatherContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            }
             default:
-                throw new UnsupportedOperationException("Unknow Uri: "+uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        if(DBretval !=0) {
+        // Because a null deletes all rows
+        if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-        db.close();
-        // Student: return the actual rows deleted
-        return DBretval;
+        return rowsDeleted;
     }
 
     private void normalizeDate(ContentValues values) {
@@ -292,28 +292,27 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public int update(
             Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // Student: This is a lot like the delete function.  We return the number of rows impacted
-        // by the update.
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
-        int DBretval;
+        int rowsUpdated;
 
         switch (match) {
-            case WEATHER: {
-                DBretval = db.update(WeatherContract.WeatherEntry.TABLE_NAME,values,selection,selectionArgs);
+            case WEATHER:
+                normalizeDate(values);
+                rowsUpdated = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
                 break;
-            }
-            case LOCATION:{
-                DBretval = db.update(WeatherContract.LocationEntry.TABLE_NAME,values,selection,selectionArgs);
+            case LOCATION:
+                rowsUpdated = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
                 break;
-            }
             default:
-                throw new UnsupportedOperationException("Unknown error occurred " +uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        if(DBretval !=0)
-            getContext().getContentResolver().notifyChange(uri,null);
-        db.close();
-        return DBretval;
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 
     @Override
